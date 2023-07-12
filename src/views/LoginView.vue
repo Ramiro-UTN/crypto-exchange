@@ -29,7 +29,7 @@ const login = async (values) => {
  
   if(loggedIn){
     setUser(loggedIn);
-    // router.push("/transactions");
+    router.push("/");
   }
   console.log('response:', loggedIn);
   
