@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
+import TransactionsView from '../views/TransactionsView.vue'
+import { useUsersStore } from '../stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +17,28 @@ const router = createRouter({
       name: 'login',
       component: LoginView
     },
+    {
+      path: '/transactions',
+      name: 'transactions',
+      component: TransactionsView
+    },
+
   ]
+})
+
+router.beforeEach(async (to, from) => {
+  const store = useUsersStore();
+  //const transactionsStore = useTransactionsStore();
+  if (
+    // make sure the user is authenticated
+    !store.token &&
+    // ❗️ Avoid an infinite redirect
+    to.name !== 'login'
+  ) {
+    // redirect the user to the login page
+    return { name: 'login' }
+  }
+  
 })
 
 export default router

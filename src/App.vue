@@ -1,6 +1,19 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HeaderTitle from './components/HeaderTitle.vue'
+import { useUsersStore } from './stores/user';
+import { storeToRefs } from 'pinia'
+const store = useUsersStore();
+const { user } = storeToRefs(store);
+import Button from 'primevue/button';
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
+const logOut = () => {
+  store.setLogOut();
+  router.push('/login');
+}
+
 </script>
 
 <template>
@@ -11,7 +24,9 @@ import HeaderTitle from './components/HeaderTitle.vue'
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        
+        <RouterLink to="/transactions">Transactions</RouterLink>
+        <span>{{ user ? user.userName : '' }}</span>
+        <Button v-show="user" class="btn" @click="logOut" label="Log Out" />
       </nav>
     </div>
   </header>
@@ -24,6 +39,11 @@ header {
   line-height: 1.5;
   max-height: 100vh;
 
+}
+.btn{
+  width: 6rem;
+  height: 2rem;
+  
 }
 
 .wrapper {
@@ -84,5 +104,8 @@ nav a:first-of-type {
     font-size: 1rem;
     margin-top: 1rem;
   }
+
+
+
 }
 </style>
