@@ -2,7 +2,7 @@
 import Button from 'primevue/button';
 import ConfirmDialog from 'primevue/confirmdialog';
 import { useConfirm } from "primevue/useconfirm";
-const emit = defineEmits(['confirm'])
+const emit = defineEmits(['confirm', 'cancel'])
 
 
 const confirm = useConfirm();
@@ -16,7 +16,7 @@ const confirm1 = () => {
       emit('confirm')
     },
     reject: () => {
-      
+      emit('cancel')
     }
   });
 };
@@ -27,7 +27,14 @@ const confirm1 = () => {
 
 <template>
   <ConfirmDialog></ConfirmDialog>
-  <div class="card flex flex-wrap gap-2 justify-content-center">
-    <Button @click="confirm1()" icon="pi pi-check" label="Confirm"></Button>
+  <div class="card flex flex-wrap gap-2 justify-content-center align-items-end">
+    <Button class="btn" @click="confirm1()" icon="pi pi-check" severity="success" label="Confirm"></Button>
   </div>
 </template>
+
+<style scoped>
+.btn{
+  height: 2.5rem;
+}
+
+</style>
