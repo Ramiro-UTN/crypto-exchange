@@ -12,6 +12,7 @@ const userId = ref(null);
 const password = ref(null);
 const {setUser} = store;
 const router = useRouter();
+const loading = ref(false)
 
 const handleSubmit = async () => {
   const userObject = {
@@ -23,15 +24,18 @@ const handleSubmit = async () => {
 }
 
 const login = async (values) => {
+  loading.value = true;
   console.log('values:', values, "type:", typeof values);
   const request = axios.post('http://localhost:3001/auth/login', values);
   const loggedIn = await request.then(response => response.data);
  
   if(loggedIn){
     setUser(loggedIn);
+    loading.value = false;
     router.push("/");
   }
   console.log('response:', loggedIn);
+  
   
 }
 
@@ -51,7 +55,7 @@ const login = async (values) => {
       <Password v-model="password" placeholder="Password" toggleMask id="password" />
     </div>
 
-    <Button class="btn" type="submit" label="Sign In" icon="pi pi-check" aria-label="Sign In" />
+    <Button :loading="loading" class="btn" type="submit" label="Sign In" icon="pi pi-check" aria-label="Sign In" />
   </form>
 </template>
 

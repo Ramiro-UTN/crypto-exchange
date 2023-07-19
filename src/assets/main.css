@@ -2,13 +2,16 @@
 @import 'primevue/resources/themes/md-dark-indigo/theme.css';
 @import "primevue/resources/primevue.min.css";
 @import 'primeicons/primeicons.css';  
+@import 'primeflex/primeflex.css';
 
 #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  
 }
+
 
 a,
 .green {
@@ -23,7 +26,7 @@ a,
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   body {
     display: flex;
   }

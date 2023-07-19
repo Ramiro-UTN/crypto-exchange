@@ -2,8 +2,10 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HeaderTitle from './components/HeaderTitle.vue'
 import { useUsersStore } from './stores/user';
+import {useTransactionsStore} from './stores/transactions'
 import { storeToRefs } from 'pinia'
 const store = useUsersStore();
+const transactionsStore = useTransactionsStore();
 const { user } = storeToRefs(store);
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
@@ -11,7 +13,9 @@ const router = useRouter()
 
 const logOut = () => {
   store.setLogOut();
+  transactionsStore.resetTransactions();
   router.push('/login');
+  
 }
 
 </script>
@@ -25,6 +29,7 @@ const logOut = () => {
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/transactions">Transactions</RouterLink>
+        <RouterLink to="/history">History</RouterLink>
         <span>{{ user ? user.userName : '' }}</span>
         <Button v-show="user" class="btn" @click="logOut" label="Log Out" />
       </nav>
@@ -38,6 +43,8 @@ const logOut = () => {
 header {
   line-height: 1.5;
   max-height: 100vh;
+  display: flex;
+  
 
 }
 .btn{
@@ -48,7 +55,10 @@ header {
 
 .wrapper {
   display: flex;
-  align-items: flex-end
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 100%;
+  
 }
 
 span {
@@ -86,7 +96,7 @@ nav a:first-of-type {
 @media (min-width: 1024px) {
   header {
     display: flex;
-    padding-right: calc(var(--section-gap) / 2);
+    /* padding-right: calc(var(--section-gap) / 2); */
   }
 
 
@@ -95,6 +105,7 @@ nav a:first-of-type {
   header .wrapper {
     display: flex;
     align-items: flex-end;
+    justify-content: space-between;
 
   }
 
