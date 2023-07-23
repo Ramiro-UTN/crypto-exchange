@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useUsersStore } from '../stores/user';
+import {useTransactionsStore} from '../stores/transactions'
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 
@@ -45,9 +46,8 @@ const onSubmit =  handleSubmit(async (values) => {
 
 });
 
-
-
-
+const transactionsStore = useTransactionsStore();
+const {transactions} = storeToRefs(transactionsStore); 
 
 const store = useUsersStore();
 const { user } = storeToRefs(store);
@@ -130,6 +130,11 @@ const handleTransaction = async () => {
 
   const request = axios.post('http://localhost:3001/transactions', transactionData.value);
   const res = await request.then(response => response.data);
+
+  //testing
+  transactions.value.push(transactionData.value);
+
+
   console.log(res);
   transactionData.value = null;
   resetForm();

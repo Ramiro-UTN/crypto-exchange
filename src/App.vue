@@ -28,6 +28,7 @@ const logOut = () => {
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/wallet">My Wallet</RouterLink>
         <RouterLink to="/transactions">Transactions</RouterLink>
         <RouterLink to="/history">History</RouterLink>
         <span>{{ user ? user.userName : '' }}</span>
