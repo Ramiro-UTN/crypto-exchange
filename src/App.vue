@@ -9,7 +9,8 @@ const transactionsStore = useTransactionsStore();
 const { user } = storeToRefs(store);
 import Button from 'primevue/button';
 import { useRouter } from 'vue-router';
-const router = useRouter()
+const router = useRouter();
+
 
 const logOut = () => {
   store.setLogOut();
@@ -28,6 +29,7 @@ const logOut = () => {
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/wallet">My Wallet</RouterLink>
         <RouterLink to="/transactions">Transactions</RouterLink>
         <RouterLink to="/history">History</RouterLink>
         <span>{{ user ? user.userName : '' }}</span>
@@ -41,10 +43,14 @@ const logOut = () => {
 
 <style scoped>
 header {
+  
   line-height: 1.5;
   max-height: 100vh;
   display: flex;
-  
+ 
+  padding: 1rem 2rem;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+ 
 
 }
 .btn{
@@ -55,9 +61,10 @@ header {
 
 .wrapper {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
+  
   
 }
 
@@ -68,11 +75,13 @@ span {
 }
 
 nav {
-  width: 100%;
+  width:fit-content;
+  
+  padding: 1rem 2rem;
   font-size: 12px;
   text-align: center;
-  margin-top: 2rem;
-
+  
+  
 }
 
 nav a.router-link-exact-active {
@@ -104,16 +113,16 @@ nav a:first-of-type {
 
   header .wrapper {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
 
   }
 
   nav {
     text-align: right;
-    margin-left: -1rem;
+    
     font-size: 1rem;
-    margin-top: 1rem;
+    
   }
 
 

@@ -6,18 +6,14 @@ export const useTransactionsStore = defineStore('transactions', () => {
   const transactions = ref([]);
 
 
-  const getTransactions = (user) => {
+  const getTransactions = async (user) => {
     const baseURL = `http://localhost:3001/transactions?q={"user_id":"${user}"}`
-    axios.get(baseURL)
-      .then(res => {
-        transactions.value = res.data;
-        console.log('trans:', transactions.value)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    const req = axios.get(baseURL)
+    await req.then(response => transactions.value = response.data)
   }
-  
+
+
+
   const resetTransactions = () => {
     transactions.value = [];
   }
