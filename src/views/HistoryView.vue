@@ -1,8 +1,5 @@
 <script setup>
 import axios from 'axios'
-import { useUsersStore } from '../stores/user';
-import { storeToRefs } from 'pinia'
-import { useTransactionsStore } from '../stores/transactions'
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import Button from 'primevue/button';
@@ -11,6 +8,10 @@ import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Dialog from 'primevue/dialog';
 import { ref } from 'vue';
+//STORE
+import { useUsersStore } from '../stores/user';
+import { storeToRefs } from 'pinia'
+import { useTransactionsStore } from '../stores/transactions'
 
 const usersStore = useUsersStore();
 const { user } = storeToRefs(usersStore);
@@ -20,21 +21,13 @@ const { getTransactions } = transactionsStore;
 getTransactions(user.value.userName);
 
 
-const editingRows = ref([]);
+
 const transactionDialog = ref(false);
 const deleteProductDialog = ref(false);
 const product = ref({});
 const submitted = ref(false);
 
-const onRowEditSave = async (event) => {
-  let { newData, index } = event;
-  const selectedTransactionId = newData._id;
-  await axios.patch(`http://localhost:3001/transactions/${selectedTransactionId}`, newData)
-    .then(res => console.log(res.data))
 
-
-  transactions.value[index] = newData;
-};
 
 const actions = ref([
   { label: 'Purchase', value: 'purchase' },
@@ -100,27 +93,27 @@ const deleteSelectedProduct = async () => {
 
 <template>
   <div class="card p-fluid w-full flex justify-content-center">
-    <DataTable :value="transactions" class="p-3" v-show="transactions.length > 0" tableStyle="min-width: 50rem">
-      <template #header>
+    <DataTable :value="transactions" class="pt-4" v-show="transactions.length > 0" paginator :rows="4" tableStyle="min-width: 50rem">
+      <!-- <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
           <span class="text-xl text-900 font-bold">Transactions History</span>
           <Button icon="pi pi-refresh" rounded raised />
         </div>
-      </template>
-      <Column field="action" header="Transaction">
+      </template> -->
+      <Column field="action" style="width: 15%" header="Transaction">
         <template #body="slotProps">
           {{ slotProps.data.action.charAt(0).toUpperCase() + slotProps.data.action.substring(1)  }}
         </template>
       </Column>
-      <Column field="crypto_code" header="Crypto"></Column>
-      <Column field="crypto_amount" header="Crypto Amount"></Column>
-      <Column field="money" header="Total (ARS)">
+      <Column field="crypto_code" style="width: 12%" header="Crypto"></Column>
+      <Column field="crypto_amount" style="width: 15%" header="Crypto Amount"></Column>
+      <Column field="money" style="width: 17%" header="Total (ARS)">
         <template #body="slotProps">
           {{ '$ ' + slotProps.data.money }}
         </template>
       </Column>
-      <Column field="datetime" header="Date"></Column>
-      <Column class="col-fixed" style="width:150px">
+      <Column field="datetime" style="width: 20%" header="Date"></Column>
+      <Column class="col-fixed" style="width: 17%">
         <template #body="slotProps">
           <Button icon="pi pi-pencil" outlined rounded class="mr-2" @click="editProduct(slotProps.data)" />
           <Button icon="pi pi-trash" outlined rounded severity="danger" @click="confirmDeleteProduct(slotProps.data)" />
@@ -182,3 +175,4 @@ const deleteSelectedProduct = async () => {
     <h1 v-if="transactions.length === 0">There are no recent transactions</h1>
   </div>
 </template>
+

@@ -41,7 +41,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const store = useUsersStore();
-
+  
   if (
     // make sure the user is authenticated
     !store.token &&

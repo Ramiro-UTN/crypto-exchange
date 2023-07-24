@@ -155,7 +155,7 @@ const cancelTransaction = () => {
 
 <template>
   <Toast />
-  <div class="card flex flex-column align-items-center pt-5 ">
+  <div class="card flex flex-column align-items-center pt-4">
     <form  @submit.prevent="onSubmit" class="card flex flex-column w-7">
       <div class="field ">
         <label for="transaction">Transaction</label>
