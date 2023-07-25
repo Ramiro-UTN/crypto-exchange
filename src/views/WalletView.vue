@@ -1,6 +1,7 @@
 <script async setup>
 import { ref, watch } from 'vue';
-import axios from 'axios';
+//import axios from 'axios';
+import {getCryptoPrice} from '../services/transactions'
 import { onBeforeMount } from 'vue';
 import DataTable from 'primevue/datatable';
 import SelectButton from 'primevue/selectbutton';
@@ -35,11 +36,11 @@ onBeforeMount(async () => {
 
 watch(isDataFetched, () => fillWalletArray())
 
-const getCryptoPrice = async (cryptoCode) => {
-  return await axios
-    .get(`https://criptoya.com/api/satoshitango/${cryptoCode}/ars/1`)
-    .then(response => response.data.totalBid)
-}
+// const getCryptoPrice = async (cryptoCode) => {
+//   return await axios
+//     .get(`https://criptoya.com/api/satoshitango/${cryptoCode}/ars/1`)
+//     .then(response => response.data.totalBid)
+// }
 
 const fillWalletArray = async () => {
 
@@ -54,7 +55,7 @@ const fillWalletArray = async () => {
     balanceData.value.push({ crypto_code: crypto, returns });
     wallet.value.push({ crypto_code: crypto, amount, total: +total });
   }
-  console.log(balanceData.value)
+
   wallet.value = wallet.value.filter((crypto) => crypto.amount !== 0);
   totalSum.value = wallet.value.reduce((acc, curr) => acc + curr.total, 0);
 }
