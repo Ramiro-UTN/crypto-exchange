@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <main>
+  <div class="cont">
     <h1>Home</h1>
-  </main>
+  </div>
 </template>

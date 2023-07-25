@@ -3,6 +3,7 @@ import { ref, watch } from 'vue';
 import axios from 'axios';
 import { onBeforeMount } from 'vue';
 import DataTable from 'primevue/datatable';
+import SelectButton from 'primevue/selectbutton';
 import Column from 'primevue/column';
 
 //STORE
@@ -12,19 +13,23 @@ import { storeToRefs } from 'pinia';
 
 const usersStore = useUsersStore();
 const transactionsStore = useTransactionsStore();
-const { transactions } = storeToRefs(transactionsStore);
+const { availableCoins } = storeToRefs(transactionsStore);
 const { user } = storeToRefs(usersStore);
-const { getTransactions } = transactionsStore;
+const { getTransactions, getAvailableCoins } = transactionsStore;
+
 const isDataFetched = ref(false);
-
-
 const wallet = ref([]);
+const balanceData = ref([]);
 const totalSum = ref(0);
-const availableCoins = ref({});
+const totalSpend = ref(0);
+
+const choosenOption = ref('Assets');
+const walletOptions = ref(['Assets', 'Balance']);
 
 
 onBeforeMount(async () => {
   await getTransactions(user.value.userName);
+  getAvailableCoins();
   isDataFetched.value = true;
 })
 
@@ -38,32 +43,19 @@ const getCryptoPrice = async (cryptoCode) => {
 
 const fillWalletArray = async () => {
 
-  availableCoins.value = transactions.value
-    .map(({ action, crypto_code, crypto_amount }) => ({ action, crypto_code, crypto_amount }))
-    .reduce((out, inp) => {
-      if (out[inp.crypto_code]) {
-
-        if (inp.action === 'purchase') out[inp.crypto_code].crypto_amount += inp.crypto_amount;
-        if (inp.action === 'sale') out[inp.crypto_code].crypto_amount -= inp.crypto_amount;
-
-      } else {
-        out[inp.crypto_code] = inp;
-
-      }
-      
-      return out
-    }, {})
-
   for (const crypto in availableCoins.value) {
 
     const price = await getCryptoPrice(crypto);
     const amount = availableCoins.value[crypto].crypto_amount;
     const total = Number(price * amount).toFixed(2);
+    const moneySpendOnCrypto = +availableCoins.value[crypto].money.toFixed(2);
+    const returns = +(+total - moneySpendOnCrypto).toFixed(2);
 
+    balanceData.value.push({ crypto_code: crypto, returns });
     wallet.value.push({ crypto_code: crypto, amount, total: +total });
   }
-
-  wallet.value = wallet.value.filter((crypto)=> crypto.amount !== 0 );
+  console.log(balanceData.value)
+  wallet.value = wallet.value.filter((crypto) => crypto.amount !== 0);
   totalSum.value = wallet.value.reduce((acc, curr) => acc + curr.total, 0);
 }
 
@@ -83,28 +75,42 @@ const countDecimals = (value) => {
   return 0;
 }
 
+
+
 </script>
 
 <template>
-  <div class="flex justify-content-center h-7">
-    <DataTable v-if="wallet.length > 0" class="pt-4" :value="wallet" paginator :rows="5" tableStyle="min-width: 50rem">
+  <div class="flex justify-content-center h-7 cont">
+    <DataTable v-if="wallet.length > 0" class="pt-4" :value="choosenOption === 'Assets' ? wallet : balanceData" paginator
+      :rows="5" tableStyle="min-width: 50rem">
       <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
           <span class="text-xl text-900 font-bold">My Wallet</span>
+          <SelectButton unselectable class="ml-8" v-model="choosenOption" :options="walletOptions" />
           <span class="text-xl text-900 font-bold">{{ '$ ' + totalSum.toFixed(2) + ' ARS' }}</span>
         </div>
       </template>
-      <Column field="crypto_code" header="" style="width: 25%"></Column>
-      <Column field="amount" header="Amount" style="width: 25%">
-        <template #body="slotProps">
-          {{ (countDecimals(slotProps.data.amount) > 5) ? slotProps.data.amount.toFixed(5) : slotProps.data.amount }}
-        </template>
-      </Column>
-      <Column field="total" header="Total (ARS)" style="width: 25%">
-        <template #body="slotProps">
-          {{ '$ ' + slotProps.data.total }}
-        </template>
-      </Column>
+      <template v-if="choosenOption === 'Assets'">
+        <Column field="crypto_code" header="" style="width: 25%"></Column>
+        <Column field="amount" header="Amount" style="width: 25%">
+          <template #body="slotProps">
+            {{ (countDecimals(slotProps.data.amount) > 5) ? slotProps.data.amount.toFixed(5) : slotProps.data.amount }}
+          </template>
+        </Column>
+        <Column field="total" header="Total (ARS)" style="width: 25%">
+          <template #body="slotProps">
+            {{ '$ ' + slotProps.data.total }}
+          </template>
+        </Column>
+      </template>
+      <template v-if="choosenOption === 'Balance'">
+        <Column field="crypto_code" header="" style="width: 25%"></Column>
+        <Column field="returns" header="Returns (ARS)" style="width: 25%">
+          <template #body="slotProps">
+            {{ '$ ' + slotProps.data.returns }}
+          </template>
+        </Column>
+      </template>
     </DataTable>
   </div>
 </template>
