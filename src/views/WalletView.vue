@@ -82,7 +82,7 @@ const countDecimals = (value) => {
 <template>
   <div class="flex justify-content-center h-7 cont">
     <DataTable v-if="wallet.length > 0" class="pt-4" :value="choosenOption === 'Assets' ? wallet : balanceData" paginator
-      :rows="5" tableStyle="min-width: 50rem">
+      :rows="4" tableStyle="min-width: 50rem">
       <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
           <span class="text-xl text-900 font-bold">My Wallet</span>
