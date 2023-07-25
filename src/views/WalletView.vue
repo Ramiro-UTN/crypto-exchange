@@ -1,7 +1,7 @@
 <script async setup>
 import { ref, watch } from 'vue';
 //import axios from 'axios';
-import {getCryptoPrice} from '../services/transactions'
+import { getCryptoPrice } from '../services/transactions'
 import { onBeforeMount } from 'vue';
 import DataTable from 'primevue/datatable';
 import SelectButton from 'primevue/selectbutton';
@@ -76,6 +76,16 @@ const countDecimals = (value) => {
   return 0;
 }
 
+const stockClass = (data) => {
+  return [
+    
+    {
+      'text-red-400': data.returns < 0,
+      'text-green-400': data.returns > 0
+    }
+  ];
+};
+
 
 
 </script>
@@ -108,7 +118,10 @@ const countDecimals = (value) => {
         <Column field="crypto_code" header="" style="width: 25%"></Column>
         <Column field="returns" header="Returns (ARS)" style="width: 25%">
           <template #body="slotProps">
-            {{ '$ ' + slotProps.data.returns }}
+            <div :class="stockClass(slotProps.data)">
+              {{ '$ ' + slotProps.data.returns }}
+            </div>
+
           </template>
         </Column>
       </template>
