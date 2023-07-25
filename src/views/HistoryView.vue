@@ -92,7 +92,7 @@ const deleteSelectedProduct = async () => {
 </script>
 
 <template>
-  <div class="card p-fluid w-full flex justify-content-center">
+  <div class="card p-fluid w-full flex justify-content-center cont">
     <DataTable :value="transactions" class="pt-4" v-show="transactions.length > 0" paginator :rows="4" tableStyle="min-width: 50rem">
       <!-- <template #header>
         <div class="flex flex-wrap align-items-center justify-content-between gap-2">
