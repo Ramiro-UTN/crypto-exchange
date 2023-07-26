@@ -21,6 +21,11 @@ const router = createRouter({
       component: LoginView
     },
     {
+      path: '/register',
+      name: 'register',
+      component: LoginView
+    },
+    {
       path: '/transactions',
       name: 'transactions',
       component: TransactionsView
@@ -46,7 +51,7 @@ router.beforeEach(async (to, from) => {
     // make sure the user is authenticated
     !store.token &&
     // ❗️ Avoid an infinite redirect
-    to.name !== 'login'
+    to.name !== 'login' && to.name !== 'register'
   ) {
     // redirect the user to the login page
     return { name: 'login' }

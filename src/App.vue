@@ -40,8 +40,9 @@ const logOut = () => {
     </header>
 
     <RouterView />
-    <div class="footer">
+    <div class="footer flex justify-content-between">
       <span>Laboratorio III - Ramiro Lonatti</span>
+      <span>UTN San Francisco</span>
     </div>
   </div>
 </template>
