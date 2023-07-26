@@ -1,18 +1,19 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useRouter } from 'vue-router';
 import Chart from 'primevue/chart';
 //STORE
 import { useUsersStore } from '../stores/user';
 import { useTransactionsStore } from '../stores/transactions';
 import { storeToRefs } from 'pinia';
+import Button from 'primevue/button';
 
 const usersStore = useUsersStore();
 const transactionsStore = useTransactionsStore();
 const { availableCoins } = storeToRefs(transactionsStore);
 const { user } = storeToRefs(usersStore);
 const { getTransactions, getAvailableCoins } = transactionsStore;
-
-const isDataFetched = ref(false);
+const router = useRouter();
 
 onMounted(async () => {
   await getTransactions(user.value.userName);
@@ -92,7 +93,7 @@ const setChartData = () => {
         backgroundColor: formattedData.value.map(crypto => crypto.backgroundColor),
         hoverBackgroundColor: formattedData.value.map(crypto => crypto.hoverColor),
         fontColor: 'white',
-        
+
       }
     ]
   };
@@ -101,11 +102,48 @@ const setChartData = () => {
 </script>
 
 <template>
-  <div class="cont">
+  <div class="cont flex">
+    <div class="welcome flex gap-2 flex-column align-items-center">
+      <h1>Welcome! <span>{{ ' ' + user.userName }}</span></h1>
+      <p>Press click on the button below to start trading</p>
+      <Button @click="router.push('/transactions')" label="Go to Transactions" />
+    </div>
     <div class="card flex justify-content-center">
+
       <Chart type="doughnut" :data="chartData" :options="chartOptions" class="w-full md:w-30rem" />
     </div>
   </div>
 </template>
 
+<style scoped>
+.welcome {
 
+  padding-top: 2rem;
+  height: 100%;
+  width: 50%;
+
+
+}
+
+h1 {
+
+  font-size: 3rem;
+  font-weight: 600;
+  text-decoration: underline;
+
+}
+
+div p {
+
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+@media (max-width: 1050px) {
+  .cont {
+    align-items: center;
+    flex-direction: column;
+    gap: 2rem;
+    /* padding-right: calc(var(--section-gap) / 2); */
+  }
+}
+</style>

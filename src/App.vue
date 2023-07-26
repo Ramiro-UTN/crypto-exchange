@@ -33,7 +33,7 @@ const logOut = () => {
           <RouterLink to="/wallet">My Wallet</RouterLink>
           <RouterLink to="/transactions">Transactions</RouterLink>
           <RouterLink to="/history">History</RouterLink>
-          <span>{{ user ? user.userName : '' }}</span>
+          <!-- <span>{{ user ? user.userName : '' }}</span> -->
           <Button v-show="user" class="btn" @click="logOut" label="Log Out" />
         </nav>
       </div>
@@ -63,6 +63,8 @@ header {
 .btn {
   width: 6rem;
   height: 2rem;
+  margin-left: 1rem;
+  margin-right: -2rem;
 
 }
 
