@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useUsersStore } from '../stores/user';
-import {useTransactionsStore} from '../stores/transactions'
+import { useTransactionsStore } from '../stores/transactions'
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 
@@ -37,17 +37,17 @@ const { handleSubmit,
 const selectedCoin = defineComponentBinds('selectedCoin');
 const amount = defineComponentBinds('amount');
 
-const onSubmit =  handleSubmit(async (values) => {
-  console.log('val1',values.selectedCoin);
-  console.log('val2',values.amount);
+const onSubmit = handleSubmit(async (values) => {
+  console.log('val1', values.selectedCoin);
+  console.log('val2', values.amount);
   console.log(values);
-  console.log('coinSel',selectedCoin.value.modelValue)
+  console.log('coinSel', selectedCoin.value.modelValue)
   await calcFinalPrice();
 
 });
 
 const transactionsStore = useTransactionsStore();
-const {transactions} = storeToRefs(transactionsStore); 
+const { transactions } = storeToRefs(transactionsStore);
 
 const store = useUsersStore();
 const { user } = storeToRefs(store);
@@ -156,23 +156,24 @@ const cancelTransaction = () => {
 <template>
   <Toast />
   <div class="card flex flex-column align-items-center pt-3 cont">
-    <form  @submit.prevent="onSubmit" class="card flex flex-column w-7">
+    <form @submit.prevent="onSubmit" class="card flex flex-column w-7">
       <div class="field ">
         <label for="transaction">Transaction</label>
-      <TransactionsActionSelect id="transaction" @set-action="setAction" :action="transactionAction" />
+        <TransactionsActionSelect id="transaction" @set-action="setAction" :action="transactionAction" />
       </div>
       <div class="field">
         <label for="crypto">Crypto</label>
-        <Dropdown :class="{ 'p-invalid': errors.selectedCoin }" v-bind="selectedCoin" :options="availableCoins" optionLabel="name"
-          :placeholder="'Select a coin to ' + transactionAction" id="crypto" />
+        <Dropdown :class="{ 'p-invalid': errors.selectedCoin }" v-bind="selectedCoin" :options="availableCoins"
+          optionLabel="name" :placeholder="'Select a coin to ' + transactionAction" id="crypto" />
         <small id="selectedCoin-help" class="p-error">
           {{ errors.selectedCoin }}
         </small>
       </div>
       <div class="field">
         <label for="amount">Amount</label>
-        <InputNumber placeholder=">=0.00001"  id="amount" v-bind="amount" inputId="minmaxfraction" :value="0.00001" showButtons :min="0.00001" :step="0.00001"
-          :maxFractionDigits="5" :class="{ 'p-invalid': errors.selectedCoin }" />
+        <InputNumber placeholder=">=0.00001" id="amount" v-bind="amount" inputId="minmaxfraction" :value="0.00001"
+          showButtons :min="0.00001" :step="0.00001" :maxFractionDigits="5"
+          :class="{ 'p-invalid': errors.selectedCoin }" />
         <small id="amount-help" class="p-error">
           {{ errors.amount }}
         </small>
@@ -181,34 +182,42 @@ const cancelTransaction = () => {
     </form>
     <template v-if="transactionData">
       <div class="flex flex-column gap-2 dataTable">
-      <DataTable :value="[transactionData]" tableStyle="min-width: 50rem" class="w-full pt-4 pb-2">
-        <Column field="user_id" header="User"></Column>
-        <Column field="action" header="Transaction"></Column>
-        <Column field="crypto_code" header="Crypto"></Column>
-        <Column field="crypto_amount" header="Crypto Amount"></Column>
-        <Column field="money" header="Total (ARS)"></Column>
-      </DataTable>
-      <div class="flex gap-3 justify-content-center">
-      <ConfirmDialogComp @confirm="handleTransaction" @cancel="cancelTransaction"/>
-      <Button class="btn" @click="cancelTransaction" severity="danger" label="Cancel" />
-    </div>
-    </div>
+        <DataTable :value="[transactionData]" tableStyle="min-width: 50rem" class="w-full pt-4 pb-2">
+          <Column field="user_id" header="User"></Column>
+          <Column field="action" header="Transaction"></Column>
+          <Column field="crypto_code" header="Crypto"></Column>
+          <Column field="crypto_amount" header="Crypto Amount"></Column>
+          <Column field="money" header="Total (ARS)"></Column>
+        </DataTable>
+        <div class="flex gap-3 justify-content-center">
+          <ConfirmDialogComp @confirm="handleTransaction" @cancel="cancelTransaction" />
+          <Button class="btn" @click="cancelTransaction" severity="danger" label="Cancel" />
+        </div>
+      </div>
     </template>
   </div>
 </template>
 
 <style scoped>
-
-.field{
+.field {
   display: flex;
+  padding: 0.2rem 1rem;
+  border-radius: 5px;
+  border-color: rgba(255, 255, 255, 0.342);
+  background-color: rgba(255, 255, 255, 0.555);
   flex-direction: column;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
-.btn{
+
+.btn {
   width: 6rem;
   height: 2.5rem;
 }
-.dataTable{
+label{
+  
+  margin-bottom: -2px;
+}
+.dataTable {
   margin-top: -4rem;
 }
-
 </style>

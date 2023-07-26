@@ -6,6 +6,7 @@ import { onBeforeMount } from 'vue';
 import DataTable from 'primevue/datatable';
 import SelectButton from 'primevue/selectbutton';
 import Column from 'primevue/column';
+import DisplayMessage from '../components/DisplayMessage.vue';
 
 //STORE
 import { useUsersStore } from '../stores/user';
@@ -92,6 +93,7 @@ const stockClass = (data) => {
 
 <template>
   <div class="flex justify-content-center h-7 cont">
+    <DisplayMessage v-if="wallet.length=== 0" msg="Your wallet is empty"/>
     <DataTable v-if="wallet.length > 0" class="pt-4" :value="choosenOption === 'Assets' ? wallet : balanceData" paginator
       :rows="4" tableStyle="min-width: 50rem">
       <template #header>
