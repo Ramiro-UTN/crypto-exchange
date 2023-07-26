@@ -40,7 +40,7 @@ const { handleSubmit,
   defineComponentBinds,
   values } = useForm({ validationSchema: loginSchema });
 
-//
+
 
 const userId = defineComponentBinds('userId');
 const password = defineComponentBinds('password');
@@ -57,15 +57,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 });
 
-
-
-const handleSubmits = async () => {
-
-}
-
 const login = async (values) => {
-  //loading.value = true;
-  console.log('values:', values, "type:", typeof values);
   const request = axios.post('http://localhost:3001/auth/login', values);
   const loggedIn = await request.then(response => response.data);
 
@@ -73,7 +65,7 @@ const login = async (values) => {
     setUser(loggedIn);
     router.push("/");
   }
-  console.log('response:', loggedIn);
+
 }
 const register = async (values) => {
 
@@ -85,9 +77,6 @@ const register = async (values) => {
   }
 
 }
-
-
-
 
 </script>
 <template>

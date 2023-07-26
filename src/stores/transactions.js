@@ -1,5 +1,5 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import axios from 'axios';
 
 export const useTransactionsStore = defineStore('transactions', () => {
@@ -8,9 +8,9 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
 
   const getTransactions = async (user) => {
-    const baseURL = `http://localhost:3001/transactions?q={"user_id":"${user}"}`
-    const req = axios.get(baseURL)
-    await req.then(response => transactions.value = response.data)
+    const baseURL = `http://localhost:3001/transactions?q={"user_id":"${user}"}`;
+    const req = axios.get(baseURL);
+    await req.then(response => transactions.value = response.data);
   }
 
   const getAvailableCoins = () => {
@@ -21,11 +21,11 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
         if (inp.action === 'purchase') {
           out[inp.crypto_code].crypto_amount += inp.crypto_amount;
-          out[inp.crypto_code].money += inp.money
+          out[inp.crypto_code].money += inp.money;
         }
         if (inp.action === 'sale') {
           out[inp.crypto_code].crypto_amount -= inp.crypto_amount;
-          out[inp.crypto_code].money -= inp.money
+          out[inp.crypto_code].money -= inp.money;
         }
 
       } else {
@@ -33,7 +33,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
       }
       
-      return out
+      return out;
     }, {})
   }
 
@@ -41,7 +41,7 @@ export const useTransactionsStore = defineStore('transactions', () => {
 
   const resetTransactions = () => {
     transactions.value = [];
-    availableCoins.value = {}
+    availableCoins.value = {};
   }
 
 

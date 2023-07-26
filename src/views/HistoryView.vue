@@ -7,6 +7,7 @@ import Dropdown from 'primevue/dropdown';
 import InputText from 'primevue/inputtext';
 import InputNumber from 'primevue/inputnumber';
 import Dialog from 'primevue/dialog';
+import DisplayMessage from '../components/DisplayMessage.vue';
 import { ref } from 'vue';
 //STORE
 import { useUsersStore } from '../stores/user';
@@ -172,7 +173,7 @@ const deleteSelectedProduct = async () => {
       </template>
     </Dialog>
 
-    <h1 v-if="transactions.length === 0">There are no recent transactions</h1>
+    <DisplayMessage v-if="transactions.length === 0" msg="There are no recent transactions"/>
   </div>
 </template>
 

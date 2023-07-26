@@ -29,11 +29,11 @@ const logOut = () => {
         <HeaderTitle msg="Crypto Exchange" />
 
         <nav>
-          <RouterLink to="/">Home</RouterLink>
-          <RouterLink to="/wallet">My Wallet</RouterLink>
-          <RouterLink to="/transactions">Transactions</RouterLink>
-          <RouterLink to="/history">History</RouterLink>
-          <span>{{ user ? user.userName : '' }}</span>
+          <RouterLink to="/"><i class="pi pi-home"></i> Home</RouterLink>
+          <RouterLink to="/wallet"><i class="pi pi-wallet"></i> My Wallet</RouterLink>
+          <RouterLink to="/transactions"><i class="pi pi-bitcoin"></i> Transactions</RouterLink>
+          <RouterLink to="/history"><i class="pi pi-history"></i> History</RouterLink>
+          <!-- <span>{{ user ? user.userName : '' }}</span> -->
           <Button v-show="user" class="btn" @click="logOut" label="Log Out" />
         </nav>
       </div>
@@ -59,10 +59,15 @@ header {
 
 
 }
+i{
+  margin-right: 2px;
+}
 
 .btn {
   width: 6rem;
   height: 2rem;
+  margin-left: 1rem;
+  margin-right: -2rem;
 
 }
 
