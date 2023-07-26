@@ -92,7 +92,7 @@ const register = async (values) => {
 </script>
 <template>
   <Toast />
-  <div class="cont">
+  <div class="cont flex justify-content-center pt-2">
     <form @submit.prevent="onSubmit">
       <div class="label-input-group">
         <label for="username">Username</label>
@@ -128,7 +128,7 @@ const register = async (values) => {
       <Button class="btn" type="submit" :label="isLogin ? 'Sign In' : 'Sign Up'" icon="pi pi-check" />
       <small>
         <RouterLink @click="isLogin = !isLogin" :to="isLogin ? '/register' : '/login'">
-          {{ isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In" }}
+          <span class="router-link">{{ isLogin ? "Don't have an account? Sign Up" : "Already have an account? Sign In" }}</span>
         </RouterLink>
       </small>
     </form>
@@ -139,16 +139,30 @@ const register = async (values) => {
 <style scoped>
 form {
   display: flex;
+  color: rgb(54, 54, 54);
   flex-direction: column;
+  height: fit-content;
   place-items: center;
   row-gap: 1rem;
-  padding: 2rem;
+  padding: 2.5rem 1.2rem 1rem;
   margin-top: 1rem;
+  width: fit-content;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  background-color: rgba(255, 255, 255, 0.555);
+  
+}
+
+.router-link{
+  color: rgb(54, 54, 54);
 }
 
 .label-input-group {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  padding: 0.2rem 1rem;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 
 }
 
