@@ -7,29 +7,60 @@ import Password from 'primevue/password';
 import Toast from 'primevue/toast';
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useUsersStore } from '../stores/user'
 import { useRouter } from 'vue-router';
 
 
 
 const store = useUsersStore();
-const userId = ref(null);
-const password = ref(null);
-const email = ref(null);
+
 const { setUser } = store;
 const router = useRouter();
-const loading = ref(false)
 const isLogin = ref(true);
 
+//validate form
+import * as yup from 'yup';
+import { useForm } from 'vee-validate';
 
+const loginSchema = yup.object().shape({
+  userId: yup.string().required('Please enter your ursername').label('Username'),
+  password: yup.string().required('Please enter your password').label('Password'),
+})
 
-const handleSubmit = async () => {
-  const userObject = (isLogin.value) ? { userName: userId.value, password: password.value }
-  :{ userName: userId.value, email: email.value, password: password.value }
+// const registerSchema = yup.object().shape({
+//   userId: yup.string().required('Please enter your ursername').label('Username'),
+//   email: yup.string().email().required('Please enter your email').label('Email'),
+//   password: yup.string().required('Please enter your password').label('Password'),
+// })
+
+const { handleSubmit,
+  resetForm,
+  errors,
+  defineComponentBinds,
+  values } = useForm({ validationSchema: loginSchema });
+
+//
+
+const userId = defineComponentBinds('userId');
+const password = defineComponentBinds('password');
+const email = defineComponentBinds('email');
+
+const onSubmit = handleSubmit(async (values) => {
+
+  const userObject = (isLogin.value) ? { userName: userId.value.modelValue, password: password.value.modelValue }
+    : { userName: userId.value.modelValue, email: email.value.modelValue, password: password.value.modelValue }
 
   if (isLogin.value) await login(userObject);
   if (!isLogin.value) await register(userObject);
+
+
+});
+
+
+
+const handleSubmits = async () => {
+
 }
 
 const login = async (values) => {
@@ -48,38 +79,50 @@ const register = async (values) => {
 
   const request = axios.post('http://localhost:3001/auth/register', values);
   const savedUser = await request.then(response => response.data);
-  if(savedUser){
-    toast.add({ severity: "success", summary: 'Confirmed', detail: 'you have successfully registered', life: 3000 });
+  if (savedUser) {
+    toast.add({ severity: "success", summary: 'Confirmed', detail: 'You have successfully registered', life: 3000 });
     isLogin.value = true;
   }
 
 }
 
 
+
+
 </script>
 <template>
-  <Toast/>
+  <Toast />
   <div class="cont">
-    <form @submit.prevent="handleSubmit()">
+    <form @submit.prevent="onSubmit">
       <div class="label-input-group">
         <label for="username">Username</label>
         <span class="p-input-icon-left inputBox">
           <i class="pi pi-user" />
-          <InputText id="username" v-model="userId" placeholder="Username" />
+          <InputText :class="{ 'p-invalid': errors.userId }" id="username" v-bind="userId" placeholder="Username" />
         </span>
+        <small id="userId-help" class="p-error">
+          {{ errors.userId }}
+        </small>
       </div>
       <template v-if="!isLogin">
         <div class="label-input-group">
           <label for="email">Email</label>
           <span class="p-input-icon-left inputBox">
             <i class="pi pi-envelope" />
-            <InputText id="email" v-model="email" placeholder="Email" />
+            <InputText :class="{ 'p-invalid': errors.email }" id="email" v-bind="email" placeholder="Email" />
           </span>
+          <small id="email-help" class="p-error">
+            {{ errors.email }}
+          </small>
         </div>
       </template>
       <div class="label-input-group">
         <label for="password">Password</label>
-        <Password v-model="password" placeholder="Password" toggleMask id="password" />
+        <Password :class="{ 'p-invalid': errors.password }" v-bind="password" placeholder="Password" toggleMask
+          id="password" />
+        <small id="password-help" class="p-error">
+          {{ errors.password }}
+        </small>
       </div>
 
       <Button class="btn" type="submit" :label="isLogin ? 'Sign In' : 'Sign Up'" icon="pi pi-check" />
